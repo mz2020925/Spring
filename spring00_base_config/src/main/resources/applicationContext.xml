@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--1.导入spring坐标spring-context，对应版本是5.2.17.RELEASE-->
+    <!--2.使用bean标签来配置IoC容器中的bean
+        id属性：给bean起名字
+        class属性：给bean定义类型
+    -->
+    <!--方式一、使用构造方法实例化bean-->
+    <bean id="bookDao" name="dao,dao2;dao3 dao4" class="com.itheima.dao.impl.BookDaoImpl" scope="singleton"/>
+    <!--方式二、使用静态工厂实例化bean-->
+
+    <bean id="bookService" name="service service2" class="com.itheima.service.impl.BookServiceImpl" scope="singleton">
+        <!--7.配置service和dao的关系，其实就是配置BookServiceImpl和BookDaoImpl这两个类对应的对象之间的关系
+            property标签：表示配置当前bean的属性
+            name属性：表示配置BookServiceImpl类的哪一个具体的属性——private BookDao bookDao;
+            ref属性：表示参照哪一个bean（映射到上面哪个id="bookDao"的bean）
+        -->
+        <property name="bookDao" ref="bookDao"/>
+    </bean>
+</beans>

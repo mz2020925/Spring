@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="bookDao" name="bookDao2" class="com.itheima.dao.impl.BookDaoImpl"/>
+    <!--自动装配：按类型、或者按名字，只适用引用类型依赖注入，不适用简单类型依赖注入-->
+    <bean id="bookService" class="com.itheima.service.impl.BookServiceImpl" autowire="byType"/>
+</beans>

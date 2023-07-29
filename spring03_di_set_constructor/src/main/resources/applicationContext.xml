@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="bookDao" name="bookDao2" class="com.itheima.dao.impl.BookDaoImpl">
+        <!--1.（依赖）setter注入：简单数据类型，setter方法的形参是简单（基本）数据类型，spring内部会自动把value="10"转换成int类型-->
+        <!--
+        <property name="databaseName" value="mysql"/>
+        <property name="connectionNum" value="10"/>
+        -->
+
+        <!--4.（依赖）构造器注入：简单（基本）数据类型，这里的name=""是带参构造方法的形参名字，形参是简单（基本）数据类型-->
+        <constructor-arg name="databaseName" value="mysqlLite"/>
+        <constructor-arg name="connectionNum" value="1024"/>
+        <!--上面那种写name="databaseName"和BookDaoImpl类中的带参构造方法的形参必须相同，耦合度太高。-->
+        <!--现在改用参数类型来匹配，一定程度降低了耦合度，这种方式在多个String类型形参的情况下不靠谱。-->
+        <!--
+        <constructor-arg type="java.lang.String" value="mysqlLite"/>
+        <constructor-arg type="int" value="256"/>
+        -->
+        <!--上面使用参数类型来匹配不靠谱，使用位置index="1"来匹配-->
+        <!--
+        <constructor-arg index="1" value="mysqlLite"/>
+        <constructor-arg index="0" value="1024"/>
+        -->
+
+    </bean>
+    <bean id="userDao" name="userDao2" class="com.itheima.dao.impl.UserDaoImpl"/>
+    <bean id="bookService" class="com.itheima.service.impl.BookServiceImpl">
+        <!--2.（依赖）setter注入：引用数据类型，setter方法的形参是引用类型-->
+        <!--
+        <property name="bookDao" ref="bookDao2"/>
+        <property name="userDao" ref="userDao2"/>
+        -->
+
+        <!--3.（依赖）构造器注入：引用数据类型，这里的name=""是带参构造方法的形参名字，形参是引用类型-->
+        <constructor-arg name="bookDao" ref="bookDao2"/>
+        <constructor-arg name="userDao" ref="userDao2"/>
+    </bean>
+
+</beans>

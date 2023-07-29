@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+        ">
+
+    <!--《一》管理Druid的数据库连接池对象：DruidDataSource对象-->
+    <!--
+    <bean id="dataSource1" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/spring_db"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+    </bean>
+    -->
+
+    <!--《二》管理C3P0的数据库连接池对象：ComboPooledDataSource对象-->
+    <!--
+    <bean id="dataSource2" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/spring_db"/>
+        <property name="user" value="root"/>
+        <property name="password" value="root"/>
+    </bean>
+    -->
+
+    <!--《三》将上述连接数据库的四把钥匙写入jdbc.properties，然后去加载这个文件-->
+    <!--1.开启context命名空间（需要修改5个地方）：
+    1.1在上面<beans 标签后面添加下面一行
+    xmlns:(1)context="http://www.springframework.org/schema/(2)context"
+
+    1.2在xsi:schemaLocation=中添加如下两行：
+    http://www.springframework.org/schema/(3)context
+    http://www.springframework.org/schema/(4)context/spring-(5)pcontext.xsd
+    -->
+    <!--2.使用context命名空间加载properties文件-->
+    <!--<context:property-placeholder location="druid.properties" system-properties-mode="NEVER"/>-->
+    <!--<context:property-placeholder location="druid.properties, druid2.properties" system-properties-mode="NEVER"/>-->
+    <!--下两行是规范格式。下面这一行写法(classpath:*.properties)能读到哪些范围内的配置文件：
+    类路径classpath指的是编译后路径，即本项目[或模块目录]/target/[项目或模块名]/WEB-INF/classes。
+    包括src/main/java路径 和 src/main/resouces路径-->
+    <context:property-placeholder location="classpath:*.properties" system-properties-mode="NEVER"/>
+    <!--下面这一行写法(classpath*:*.properties)把 第三方jar包的根路径 也加入到范围内-->
+    <context:property-placeholder location="classpath*:*.properties" system-properties-mode="NEVER"/>
+
+    <!--3.使用属性占位符${}读取properties文件中的属性-->
+    <bean id="dataSource3" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${driverClassName}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+        <property name="initialSize" value="${initialSize}"/>
+        <property name="maxActive" value="${maxActive}"/>
+        <property name="maxWait" value="${maxWait}"/>
+    </bean>
+    <bean id="bookDao" class="com.itheima.dao.impl.BookDaoImpl">
+        <property name="properties">
+            <props>
+                <prop key="driverClassName">${driverClassName}</prop>
+                <prop key="url">${url}</prop>
+                <prop key="username">${username}</prop>
+                <prop key="password">${password}</prop>
+            </props>
+        </property>
+    </bean>
+
+
+
+</beans>
